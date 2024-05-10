@@ -19,4 +19,6 @@ while (!(Test-Path $FILEPATH)) {
 }
 
 # Once download is complete, run the MP4 file in fullscreen
-Start-Process -FilePath $FILEPATH -WindowStyle Maximized
+$wmp = New-Object -ComObject "WMPlayer.OCX"
+$wmp.URL = $FILEPATH
+$wmp.fullScreen = $true
