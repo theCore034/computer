@@ -22,3 +22,12 @@ while (!(Test-Path $FILEPATH)) {
 $wmp = New-Object -ComObject "WMPlayer.OCX"
 $wmp.URL = $FILEPATH
 $wmp.fullScreen = $true
+
+# Event handler for PlayStateChange event
+Register-ObjectEvent -InputObject $wmp -EventName "PlayStateChange" -Action {
+    param($sender, $eventArgs)
+    if ($sender.playState -eq 8) {  # 8 means MediaEnded
+        $sender.close()
+        Unregister-Event -SourceIdentifier "MediaPlayerEvent"
+    }
+} -SourceIdentifier "MediaPlayerEvent"
